@@ -1,0 +1,23 @@
+{
+  "pins" : [
+    {
+      "identity" : "swiftanthropic",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jamesrochabrun/SwiftAnthropic",
+      "state" : {
+        "revision" : "11a8d8f71efae770c1452d36adecd13d7a41d0f7",
+        "version" : "1.4.0"
+      }
+    },
+    {
+      "identity" : "swiftopenai",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jamesrochabrun/SwiftOpenAI",
+      "state" : {
+        "revision" : "7278ddbdeda4a8143402ff768c7678ea07360871",
+        "version" : "2.1.0"
+      }
+    }
+  ],
+  "version" : 2
+}
