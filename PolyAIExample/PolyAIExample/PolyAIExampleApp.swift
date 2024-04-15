@@ -6,12 +6,13 @@
 //
 
 import SwiftUI
+import PolyAI
 
 @main
 struct PolyAIExampleApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ApiKeyIntroView()
         }
     }
 }
