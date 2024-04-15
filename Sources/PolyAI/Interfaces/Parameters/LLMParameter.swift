@@ -6,13 +6,15 @@
 //
 
 import Foundation
+import SwiftOpenAI
+import SwiftAnthropic
 
 public enum LLMParameter {
    
-   case openAI(model: String, messages: [LLMMessageParameter], maxTokens: Int? = nil, stream: Bool? = nil)
-   case anthropic(model: String, messages: [LLMMessageParameter], maxTokens: Int, stream: Bool)
+   case openAI(model: SwiftOpenAI.Model, messages: [LLMMessage], maxTokens: Int? = nil)
+   case anthropic(model: SwiftAnthropic.Model, messages: [LLMMessage], maxTokens: Int)
    
-   var llm: String {
+   var llmService: String {
       switch self {
       case .openAI: return "OpenAI"
       case .anthropic: return "Anthropic"

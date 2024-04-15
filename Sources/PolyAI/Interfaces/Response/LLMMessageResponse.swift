@@ -36,20 +36,12 @@ struct ChatUsageMetrics: UsageMetrics {
 public protocol ToolUsage {
    var toolId: String? { get }
    var toolName: String { get }
-   var toolInput: [String: String]? { get } // Assuming tools might have inputs. Adjust as necessary.
+   var toolInput: [String: String]? { get }
 }
 
 // MARK: OpenAI
 
 extension ChatCompletionObject: LLMMessageResponse {
-   public var tools: [ToolUsage] {
-      []
-   }
-   
-   public var role: String {
-      choices.first?.message.role ?? "unknown"
-   }
-   
    public var createdAt: Int? {
       created
    }
@@ -58,8 +50,17 @@ extension ChatCompletionObject: LLMMessageResponse {
       choices.first?.message.content ?? ""
    }
    
+   
    public var usageMetrics: UsageMetrics {
       ChatUsageMetrics(inputTokens: usage.promptTokens, outputTokens: usage.completionTokens, totalTokens: usage.totalTokens)
+   }
+   
+   public var tools: [ToolUsage] {
+      []
+   }
+   
+   public var role: String {
+      choices.first?.message.role ?? "unknown"
    }
 }
 

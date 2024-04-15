@@ -8,8 +8,8 @@
 import Foundation
 
 public enum LLMConfiguration {
-   case openAI(apiKey: String, organizationID: String?, configuration: URLSessionConfiguration = .default, decoder: JSONDecoder = .init())
-   case anthropic(apiKey: String, apiVersion: String, configuration: URLSessionConfiguration = .default)
+   case openAI(apiKey: String, organizationID: String? = nil, configuration: URLSessionConfiguration = .default, decoder: JSONDecoder = .init())
+   case anthropic(apiKey: String, configuration: URLSessionConfiguration = .default)
 }
 
 public protocol PolyAIService {
@@ -21,4 +21,8 @@ public protocol PolyAIService {
    func createMessage(
       _ parameter: LLMParameter)
    async throws -> LLMMessageResponse
+   
+   func streamMessage(
+      _ parameter: LLMParameter)
+   async throws -> AsyncThrowingStream<LLMMessageStreamResponse, Error>
 }
