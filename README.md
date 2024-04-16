@@ -78,7 +78,7 @@ let parameters: LLMParameter = .openAI(model: .gpt4turbo, messages: [.init(role:
 let stream = try await service.streamMessage(parameters)
 ```
 
-To interact with Anthropic instead, all you need to do is update the parameters:
+To interact with Anthropic instead, all you need to do is change just one line of code! 🔥
 
 ```swift
 let prompt = "How are you today?"
