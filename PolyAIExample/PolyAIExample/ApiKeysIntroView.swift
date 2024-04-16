@@ -58,7 +58,7 @@ struct ApiKeyIntroView: View {
             .buttonStyle(.bordered)
             .padding()
             .textFieldStyle(.roundedBorder)
-            NavigationLink(destination: OptionsListView(service: PolyAIServiceFactory.configurations(configurations))) {
+            NavigationLink(destination: OptionsListView(service: PolyAIServiceFactory.serviceWith(configurations))) {
                Text("Continue")
                   .padding()
                   .padding(.horizontal, 48)

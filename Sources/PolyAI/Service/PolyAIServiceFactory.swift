@@ -9,7 +9,7 @@ import Foundation
 
 public struct PolyAIServiceFactory {
    
-   public static func configurations(
+   public static func serviceWith(
       _ configurations: [LLMConfiguration])
       -> PolyAIService
    {
