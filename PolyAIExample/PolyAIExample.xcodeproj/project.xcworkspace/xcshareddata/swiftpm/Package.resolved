@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/jamesrochabrun/SwiftAnthropic",
       "state" : {
-        "revision" : "11a8d8f71efae770c1452d36adecd13d7a41d0f7",
-        "version" : "1.4.0"
+        "branch" : "main",
+        "revision" : "13c7638739b56f6207ae6f397bed954ea15f0388"
       }
     },
     {
@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/jamesrochabrun/SwiftOpenAI",
       "state" : {
-        "revision" : "c09b9d5706b2684798d055c5f0b2597e880302fc",
-        "version" : "2.2.0"
+        "branch" : "main",
+        "revision" : "3bf66a9b1af1b2e1cf6af051f198db37f8f2fbaa"
       }
     }
   ],

@@ -44,7 +44,7 @@ struct ApiKeyIntroView: View {
                   HStack {
                      TextField("Enter OpenAI API Key", text: $openAIAPIKey)
                      Button {
-                        configurations.append(.openAI(apiKey: openAIAPIKey))
+                        configurations.append(.openAI(.api(key: openAIAPIKey)))
                         openAIConfigAdded = true
                      } label: {
                         Image(systemName: "plus")

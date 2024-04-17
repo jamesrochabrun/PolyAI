@@ -18,6 +18,8 @@ An open-source Swift package that simplifies LLM message completions, inspired b
 - [Usage](#usage)
 - [Message](#message)
 - [Collaboration](#collaboration)
+- [OpenAI Azure](OpenAI Azure)
+- [OpenAI AIProxy](AIProxy)
 
 ## Description
 
@@ -55,7 +57,7 @@ import PolyAI
 Then, define the LLM configurations. Currently, OpenAI and Anthropic are supported:
 
 ```swift
-let openAIConfiguration: LLMConfiguration = .openAI(apiKey: "your_openai_api_key_here")
+let openAIConfiguration: LLMConfiguration = .openAI(.api(key: "your_openai_api_key_here"))
 let anthropicConfiguration: LLMConfiguration = .anthropic(apiKey: "your_anthropic_api_key_here")
 let configurations = [openAIConfiguration, anthropicConfiguration]
 ```
@@ -85,6 +87,26 @@ let prompt = "How are you today?"
 let parameters: LLMParameter = .anthropic(model: .claude3Sonnet, messages: [.init(role: .user, content: prompt)], maxTokens: 1024)
 let stream = try await service.streamMessage(parameters)
 ```
+
+## OpenAI Azure
+
+To access the OpenAI API via Azure, you can use the following configuration setup.
+
+```swift
+let azureConfiguration: LLMConfiguration = .openAI(.azure(configuration: .init(resourceName: "YOUR_RESOURCE_NAME", openAIAPIKey: .apiKey("YOUR_API_KEY"), apiVersion: "THE_API_VERSION")))
+```
+
+More information can be found [here](https://github.com/jamesrochabrun/SwiftOpenAI?tab=readme-ov-file#azure-openai).
+
+## OpenAI AIProxy
+
+To access the OpenAI API via AIProxy, use the following configuration setup.
+
+```swift
+let aiProxyConfiguration: LLMConfiguration = .openAI(.aiProxy(aiproxyPartialKey: "hardcode_partial_key_here", aiproxyDeviceCheckBypass: "hardcode_device_check_bypass_here"))
+```
+
+More information can be found [here](https://github.com/jamesrochabrun/SwiftOpenAI?tab=readme-ov-file#aiproxy).
 
 ## Collaboration
 

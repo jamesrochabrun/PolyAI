@@ -22,8 +22,18 @@ struct DefaultPolyAIService: PolyAIService {
    {
       for configuration in configurations {
          switch configuration {
-         case .openAI(let apiKey, let organizationID, let configuration, let decoder):
-            openAIService = OpenAIServiceFactory.service(apiKey: apiKey, organizationID: organizationID, configuration: configuration, decoder: decoder)
+         case .openAI(let configuration):
+            switch configuration {
+            case .api(let key, let organizationID, let configuration, let decoder):
+               openAIService = OpenAIServiceFactory.service(apiKey: key, organizationID: organizationID, configuration: configuration, decoder: decoder)
+           
+            case .azure(let azureConfiguration, let urlSessionConfiguration, let decoder):
+               openAIService = OpenAIServiceFactory.service(azureConfiguration: azureConfiguration, urlSessionConfiguration: urlSessionConfiguration, decoder: decoder)
+          
+            case .aiProxy(let aiproxyPartialKey, let aiproxyDeviceCheckBypass, let configuration, let decoder):
+               openAIService = OpenAIServiceFactory.service(aiproxyPartialKey: aiproxyPartialKey, aiproxyDeviceCheckBypass: aiproxyDeviceCheckBypass, configuration: configuration, decoder: decoder)
+            }
+            
          case .anthropic(let apiKey, let configuration):
             anthropicService = AnthropicServiceFactory.service(apiKey: apiKey, configuration: configuration)
          }

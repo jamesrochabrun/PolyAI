@@ -6,17 +6,35 @@
 //
 
 import Foundation
+import SwiftOpenAI
 
 /// Represents configurations for different LLM providers.
 public enum LLMConfiguration {
+
+   case openAI(OpenAI)
    
-   /// Configuration for accessing OpenAI's API.
-   /// - Parameters:
-   ///   - apiKey: The API key for authenticating requests to OpenAI.
-   ///   - organizationID: Optional organization ID for OpenAI usage.
-   ///   - configuration: The URLSession configuration to use for network requests. Defaults to `.default`.
-   ///   - decoder: The JSON decoder used for decoding responses. Defaults to a new instance of `JSONDecoder`.
-   case openAI(apiKey: String, organizationID: String? = nil, configuration: URLSessionConfiguration = .default, decoder: JSONDecoder = .init())
+   public enum OpenAI {
+      /// Configuration for accessing OpenAI's API.
+      /// - Parameters:
+      ///   - apiKey: The API key for authenticating requests to OpenAI.
+      ///   - organizationID: Optional organization ID for OpenAI usage.
+      ///   - configuration: The URLSession configuration to use for network requests. Defaults to `.default`.
+      ///   - decoder: The JSON decoder used for decoding responses. Defaults to a new instance of `JSONDecoder`.
+      case api(key: String, organizationID: String? = nil, configuration: URLSessionConfiguration = .default, decoder: JSONDecoder = .init())
+      /// Configuration for accessing OpenAI's API.
+      /// - Parameters:
+      ///   - configuration: The AzureOpenAIConfiguration.
+      ///   - urlSessionConfiguration: The URLSession configuration to use for network requests. Defaults to `.default`.
+      ///   - decoder: The JSON decoder used for decoding responses. Defaults to a new instance of `JSONDecoder`.
+      case azure(configuration: AzureOpenAIConfiguration, urlSessionConfiguration: URLSessionConfiguration = .default, decoder: JSONDecoder = .init())
+      /// Configuration for accessing OpenAI's API.
+      /// - Parameters:
+      ///   - aiproxyPartialKey: The partial key provided in the 'API Keys' section of the AIProxy dashboard.
+      ///   - aiproxyDeviceCheckBypass: The bypass token that is provided in the 'API Keys' section of the AIProxy dashboard.
+      ///   - configuration: The URLSession configuration to use for network requests. Defaults to `.default`.
+      ///   - decoder: The JSON decoder used for decoding responses. Defaults to a new instance of `JSONDecoder`.
+      case aiProxy(aiproxyPartialKey: String, aiproxyDeviceCheckBypass: String? = nil, configuration: URLSessionConfiguration = .default, decoder: JSONDecoder = .init())
+   }
    
    /// Configuration for accessing Anthropic's API.
    /// - Parameters:
