@@ -50,7 +50,7 @@ struct DefaultPolyAIService: PolyAIService {
          }
          let messageParams: [SwiftAnthropic.MessageParameter.Message] = messages.map { MessageParameter.Message(role: SwiftAnthropic.MessageParameter.Message.Role(rawValue: $0.role) ?? .user, content: .text($0.content)) }
          let messageParameter = MessageParameter(model: model, messages: messageParams, maxTokens: maxTokens, stream: false)
-         return try await anthropicService.createMessage(messageParameter, beta: nil)
+         return try await anthropicService.createMessage(messageParameter)
       }
    }
    
@@ -73,7 +73,7 @@ struct DefaultPolyAIService: PolyAIService {
          }
          let messageParams: [SwiftAnthropic.MessageParameter.Message] = messages.map { MessageParameter.Message(role: SwiftAnthropic.MessageParameter.Message.Role(rawValue: $0.role) ?? .user, content: .text($0.content)) }
          let messageParameter = MessageParameter(model: model, messages: messageParams, maxTokens: maxTokens, stream: false)
-         let stream = try await anthropicService.streamMessage(messageParameter, beta: nil)
+         let stream = try await anthropicService.streamMessage(messageParameter)
          return try mapToLLMMessageStreamResponse(stream: stream)
       }
    }
