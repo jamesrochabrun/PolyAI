@@ -29,8 +29,9 @@ public struct LLMMessage: LLMMessageParameter {
    public enum Role: String {
       case user
       case assistant
+      case system
    }
-   
+
    /// Initializes a new message with specified role and content.
    /// - Parameters:
    ///   - role: The role of the sender of the message.

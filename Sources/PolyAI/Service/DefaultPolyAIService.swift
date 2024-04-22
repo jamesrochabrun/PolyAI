@@ -59,7 +59,8 @@ struct DefaultPolyAIService: PolyAIService {
             throw PolyAIError.missingLLMConfiguration("You Must provide a valid configuration for the \(parameter.llmService) API")
          }
          let messageParams: [SwiftAnthropic.MessageParameter.Message] = messages.map { MessageParameter.Message(role: SwiftAnthropic.MessageParameter.Message.Role(rawValue: $0.role) ?? .user, content: .text($0.content)) }
-         let messageParameter = MessageParameter(model: model, messages: messageParams, maxTokens: maxTokens, stream: false)
+         let systemMessage = messages.first { message in message.role == "assistant" }
+         let messageParameter = MessageParameter(model: model, messages: messageParams, maxTokens: maxTokens, system: systemMessage?.content, stream: false)
          return try await anthropicService.createMessage(messageParameter)
       }
    }
@@ -82,7 +83,8 @@ struct DefaultPolyAIService: PolyAIService {
             throw PolyAIError.missingLLMConfiguration("You Must provide a valid configuration for the \(parameter.llmService) API")
          }
          let messageParams: [SwiftAnthropic.MessageParameter.Message] = messages.map { MessageParameter.Message(role: SwiftAnthropic.MessageParameter.Message.Role(rawValue: $0.role) ?? .user, content: .text($0.content)) }
-         let messageParameter = MessageParameter(model: model, messages: messageParams, maxTokens: maxTokens, stream: false)
+         let systemMessage = messages.first { message in message.role == "assistant" }
+         let messageParameter = MessageParameter(model: model, messages: messageParams, maxTokens: maxTokens, system: systemMessage?.content) 
          let stream = try await anthropicService.streamMessage(messageParameter)
          return try mapToLLMMessageStreamResponse(stream: stream)
       }
