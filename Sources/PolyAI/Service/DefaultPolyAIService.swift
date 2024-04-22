@@ -58,8 +58,17 @@ struct DefaultPolyAIService: PolyAIService {
          guard let anthropicService else {
             throw PolyAIError.missingLLMConfiguration("You Must provide a valid configuration for the \(parameter.llmService) API")
          }
-         let messageParams: [SwiftAnthropic.MessageParameter.Message] = messages.map { MessageParameter.Message(role: SwiftAnthropic.MessageParameter.Message.Role(rawValue: $0.role) ?? .user, content: .text($0.content)) }
-         let systemMessage = messages.first { message in message.role == "assistant" }
+         // Remove all system messages as Anthropic uses the system message as a parameter and not as part of the messages array.
+         let messageParams: [SwiftAnthropic.MessageParameter.Message] = messages.compactMap { message in
+             guard message.role != "system" else {
+                 return nil  // Skip "system" roles
+             }
+             return MessageParameter.Message(
+                 role: SwiftAnthropic.MessageParameter.Message.Role(rawValue: message.role) ?? .user,
+                 content: .text(message.content)
+             )
+         }
+         let systemMessage  = messages.first { $0.role == "system" }
          let messageParameter = MessageParameter(model: model, messages: messageParams, maxTokens: maxTokens, system: systemMessage?.content, stream: false)
          return try await anthropicService.createMessage(messageParameter)
       }
@@ -82,9 +91,18 @@ struct DefaultPolyAIService: PolyAIService {
          guard let anthropicService else {
             throw PolyAIError.missingLLMConfiguration("You Must provide a valid configuration for the \(parameter.llmService) API")
          }
-         let messageParams: [SwiftAnthropic.MessageParameter.Message] = messages.map { MessageParameter.Message(role: SwiftAnthropic.MessageParameter.Message.Role(rawValue: $0.role) ?? .user, content: .text($0.content)) }
-         let systemMessage = messages.first { message in message.role == "assistant" }
-         let messageParameter = MessageParameter(model: model, messages: messageParams, maxTokens: maxTokens, system: systemMessage?.content) 
+         // Remove all system messages as Anthropic uses the system message as a parameter and not as part of the messages array.
+         let messageParams: [SwiftAnthropic.MessageParameter.Message] = messages.compactMap { message in
+             guard message.role != "system" else {
+                 return nil  // Skip "system" roles
+             }
+             return MessageParameter.Message(
+                 role: SwiftAnthropic.MessageParameter.Message.Role(rawValue: message.role) ?? .user,
+                 content: .text(message.content)
+             )
+         }
+         let systemMessage  = messages.first { $0.role == "system" }
+         let messageParameter = MessageParameter(model: model, messages: messageParams, maxTokens: maxTokens, system: systemMessage?.content)
          let stream = try await anthropicService.streamMessage(messageParameter)
          return try mapToLLMMessageStreamResponse(stream: stream)
       }
