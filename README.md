@@ -93,7 +93,7 @@ To interact with Gemini instead, all you need to do (again) is change just one l
 
 ```swift
 let prompt = "How are you today?"
-let parameters: LLMParameter = .gemini(model: "gemini-pro", messages: [.init(role: .user, content: prompt)], maxTokens: 2000)
+let parameters: LLMParameter = .gemini(model: ""gemini-1.5-pro-latest"", messages: [.init(role: .user, content: prompt)], maxTokens: 2000)
 let stream = try await service.streamMessage(parameters)
 ```
 
