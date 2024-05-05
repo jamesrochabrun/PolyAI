@@ -18,9 +18,8 @@ An open-source Swift package that simplifies LLM message completions, inspired b
 - [Usage](#usage)
 - [Message](#message)
 - [Collaboration](#collaboration)
-- [OpenAI Azure](#openAI-Azure)
-- [OpenAI AIProxy](#aIProxy)
-- [Gemini](#gemini)
+- [OpenAI Azure](#openAI-azure)
+- [OpenAI AIProxy](#openai-aiproxy)
 
 ## Description
 
