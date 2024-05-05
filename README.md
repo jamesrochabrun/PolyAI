@@ -20,10 +20,11 @@ An open-source Swift package that simplifies LLM message completions, inspired b
 - [Collaboration](#collaboration)
 - [OpenAI Azure](OpenAI Azure)
 - [OpenAI AIProxy](AIProxy)
+- [Gemini](Gemini)
 
 ## Description
 
-Call different LLM APIs using the OpenAI format; currently supporting [OpenAI](https://github.com/jamesrochabrun/SwiftOpenAI) and [Anthropic](https://github.com/jamesrochabrun/SwiftAnthropic), with more models, including Gemini, coming soon.
+Call different LLM APIs using the OpenAI format; currently supporting [OpenAI](https://github.com/jamesrochabrun/SwiftOpenAI), [Anthropic](https://github.com/jamesrochabrun/SwiftAnthropic), and [Gemini](https://github.com/google-gemini/generative-ai-swift).
 
 ## Installation
 
@@ -54,12 +55,13 @@ First, import the PolyAI package:
 import PolyAI
 ```
 
-Then, define the LLM configurations. Currently, OpenAI and Anthropic are supported:
+Then, define the LLM configurations. Currently, OpenAI, Anthropic and Gemini  are supported:
 
 ```swift
 let openAIConfiguration: LLMConfiguration = .openAI(.api(key: "your_openai_api_key_here"))
 let anthropicConfiguration: LLMConfiguration = .anthropic(apiKey: "your_anthropic_api_key_here")
-let configurations = [openAIConfiguration, anthropicConfiguration]
+let geminiConfiguration: LLMConfiguration = .gemini(apiKey: "your_gemini_api_key_here")
+let configurations = [openAIConfiguration, anthropicConfiguration, geminiConfiguration]
 ```
 
 With the configurations set, initialize the service:
@@ -68,7 +70,7 @@ With the configurations set, initialize the service:
 let service = PolyAIServiceFactory.serviceWith(configurations)
 ```
 
-Now, you have access to both the OpenAI and Anthropic APIs in a single package, with Gemini coming soon! 🚀
+Now, you have access to OpenAI, Anthropic and Gemini APIs in a single package. 🚀
 
 ## Message
 
@@ -85,6 +87,14 @@ To interact with Anthropic instead, all you need to do is change just one line o
 ```swift
 let prompt = "How are you today?"
 let parameters: LLMParameter = .anthropic(model: .claude3Sonnet, messages: [.init(role: .user, content: prompt)], maxTokens: 1024)
+let stream = try await service.streamMessage(parameters)
+```
+
+To interact with Gemini instead, all you need to do (again) is change just one line of code! 🔥
+
+```swift
+let prompt = "How are you today?"
+let parameters: LLMParameter = .gemini(model: "gemini-pro", messages: [.init(role: .user, content: prompt)], maxTokens: 2000)
 let stream = try await service.streamMessage(parameters)
 ```
 
