@@ -12,8 +12,10 @@ struct ApiKeyIntroView: View {
    
    @State private var anthropicAPIKey = ""
    @State private var openAIAPIKey = ""
+   @State private var geminiAPIKey = ""
    @State private var anthropicConfigAdded: Bool = false
    @State private var openAIConfigAdded: Bool = false
+   @State private var geminiConfigAdded: Bool = false
 
    @State private var configurations: [LLMConfiguration] = []
    
@@ -26,34 +28,24 @@ struct ApiKeyIntroView: View {
          VStack {
             Spacer()
             VStack(spacing: 24) {
-               VStack(alignment: .leading) {
-                  HStack {
-                     TextField("Enter Anthropic API Key", text: $anthropicAPIKey)
-                     Button {
-                        configurations.append(.anthropic(apiKey: anthropicAPIKey))
-                        anthropicConfigAdded = true
-                     } label: {
-                        Image(systemName: "plus")
-                     }
-                     .disabled(anthropicAPIKey.isEmpty)
+               LLMConfigurationView(
+                  provider: "Anthropic",
+                  configurationAdded: $anthropicConfigAdded,
+                  apiKey: $anthropicAPIKey) {
+                     configurations.append(.anthropic(apiKey: anthropicAPIKey))
                   }
-                  Text("Anthropic added to PolyAI 🚀")
-                     .opacity(anthropicConfigAdded ? 1 : 0)
-               }
-               VStack(alignment: .leading) {
-                  HStack {
-                     TextField("Enter OpenAI API Key", text: $openAIAPIKey)
-                     Button {
-                        configurations.append(.openAI(.api(key: openAIAPIKey)))
-                        openAIConfigAdded = true
-                     } label: {
-                        Image(systemName: "plus")
-                     }
-                     .disabled(openAIAPIKey.isEmpty)
+               LLMConfigurationView(
+                  provider: "OpenAI",
+                  configurationAdded: $openAIConfigAdded,
+                  apiKey: $openAIAPIKey) {
+                     configurations.append(.openAI(.api(key: openAIAPIKey)))
                   }
-                  Text("OpenAI added to PolyAI 🚀")
-                     .opacity(openAIConfigAdded ? 1 : 0)
-               }
+               LLMConfigurationView(
+                  provider: "Gemini",
+                  configurationAdded: $geminiConfigAdded,
+                  apiKey: $geminiAPIKey) {
+                     configurations.append(.gemini(apiKey: geminiAPIKey))
+                  }
             }
             .buttonStyle(.bordered)
             .padding()
@@ -72,6 +64,32 @@ struct ApiKeyIntroView: View {
          }
          .padding()
          .navigationTitle("Enter API Keys")
+      }
+   }
+}
+
+struct LLMConfigurationView: View {
+   
+   let provider: String
+   @Binding var configurationAdded: Bool
+   @Binding var apiKey: String
+   let addConfig: () -> Void
+   
+   
+   var body: some View {
+      VStack(alignment: .leading) {
+         HStack {
+            TextField("Enter \(provider) API Key", text: $apiKey)
+            Button {
+               addConfig()
+               configurationAdded = true
+            } label: {
+               Image(systemName: "plus")
+            }
+            .disabled(apiKey.isEmpty)
+         }
+         Text("\(provider) added to PolyAI 🚀")
+            .opacity(configurationAdded ? 1 : 0)
       }
    }
 }

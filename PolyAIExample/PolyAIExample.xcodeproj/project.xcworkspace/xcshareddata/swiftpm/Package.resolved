@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "generative-ai-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/google/generative-ai-swift",
+      "state" : {
+        "branch" : "main",
+        "revision" : "fcc1084ec87f66b8a12a4bc087e16f9ed5ae41c2"
+      }
+    },
+    {
       "identity" : "swiftanthropic",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/jamesrochabrun/SwiftAnthropic",

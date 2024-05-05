@@ -23,6 +23,7 @@ struct MessageDemoView: View {
    enum LLM {
       case openAI
       case anthropic
+      case gemini
    }
    
    var body: some View {
@@ -74,6 +75,11 @@ struct MessageDemoView: View {
                         .init(role: .user, content: prompt)
                      ],
                      maxTokens: 1024)
+               case .gemini:
+                  parameters = .gemini(
+                     model: "gemini-pro", messages: [
+                        .init(role: .user, content: prompt)
+                  ], maxTokens: 2000)
                }
                try await observable.streamMessage(parameters: parameters)
             }
@@ -89,6 +95,7 @@ struct MessageDemoView: View {
       Picker("Options", selection: $selectedSegment) {
          Text("Anthropic").tag(LLM.anthropic)
          Text("OpenAI").tag(LLM.openAI)
+         Text("Gemini").tag(LLM.gemini)
       }
       .pickerStyle(SegmentedPickerStyle())
       .padding()

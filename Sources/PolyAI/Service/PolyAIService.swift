@@ -41,6 +41,11 @@ public enum LLMConfiguration {
    ///   - apiKey: The API key for authenticating requests to Anthropic.
    ///   - configuration: The URLSession configuration to use for network requests. Defaults to `.default`.
    case anthropic(apiKey: String, configuration: URLSessionConfiguration = .default)
+   
+   /// Configuration for accessing Gemini's API.
+   /// - Parameters:
+   ///   - apiKey: The API key for authenticating requests to Gemini.
+   case gemini(apiKey: String)
 }
 
 /// Defines the interface for a service that interacts with Large Language Models (LLMs).

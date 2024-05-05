@@ -19,6 +19,7 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         .package(url: "https://github.com/jamesrochabrun/SwiftOpenAI", branch: "main"),
         .package(url: "https://github.com/jamesrochabrun/SwiftAnthropic", branch: "main"),
+        .package(url: "https://github.com/google/generative-ai-swift", branch: "main"),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -27,7 +28,8 @@ let package = Package(
             name: "PolyAI",
             dependencies: [
                .product(name: "SwiftOpenAI", package: "SwiftOpenAI"),
-               .product(name: "SwiftAnthropic", package: "SwiftAnthropic")
+               .product(name: "SwiftAnthropic", package: "SwiftAnthropic"),
+               .product(name: "GoogleGenerativeAI", package: "generative-ai-swift")
             ]),
         .testTarget(
             name: "PolyAITests",
