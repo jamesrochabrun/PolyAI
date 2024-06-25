@@ -33,12 +33,20 @@ public enum LLMParameter {
    ///   - maxTokens: The maximum number of tokens to generate.
    case gemini(model: String, messages: [LLMMessage], maxTokens: Int)
    
+   /// Represents a configuration for interacting with Gemini's models.
+   /// - Parameters:
+   ///   - model: The specific model. e.g: "llama3"
+   ///   - messages: An array of messages to send to the model.
+   ///   - maxTokens: The maximum number of tokens to generate.
+   case ollama(model: String, messages: [LLMMessage], maxTokens: Int)
+   
    /// A computed property that returns the name of the LLM service based on the case.
    var llmService: String {
       switch self {
       case .openAI: return "OpenAI"
       case .anthropic: return "Anthropic"
       case .gemini: return "Gemini"
+      case .ollama(let model, _, _): return model
       }
    }
 }

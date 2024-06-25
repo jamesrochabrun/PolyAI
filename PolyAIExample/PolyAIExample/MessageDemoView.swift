@@ -20,10 +20,13 @@ struct MessageDemoView: View {
    @State private var selectedImagesEncoded: [String] = []
    @State private var selectedSegment: LLM = .anthropic
 
-   enum LLM {
+   enum LLM: String, Identifiable, CaseIterable {
       case openAI
       case anthropic
       case gemini
+      case llama3
+      
+      var id: String { rawValue }
    }
    
    var body: some View {
@@ -80,6 +83,13 @@ struct MessageDemoView: View {
                      model: "gemini-1.5-pro-latest", messages: [
                         .init(role: .user, content: prompt)
                   ], maxTokens: 2000)
+               case .llama3:
+                  parameters = .ollama(
+                     model: "llama3",
+                     messages: [
+                        .init(role: .user, content: prompt)
+                     ],
+                     maxTokens: 1000)
                }
                try await observable.streamMessage(parameters: parameters)
             }
@@ -93,9 +103,9 @@ struct MessageDemoView: View {
    
    var picker: some View {
       Picker("Options", selection: $selectedSegment) {
-         Text("Anthropic").tag(LLM.anthropic)
-         Text("OpenAI").tag(LLM.openAI)
-         Text("Gemini").tag(LLM.gemini)
+         ForEach(LLM.allCases) { llm in
+            Text(llm.rawValue).tag(llm)
+         }
       }
       .pickerStyle(SegmentedPickerStyle())
       .padding()

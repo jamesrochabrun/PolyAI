@@ -13,8 +13,10 @@ struct ApiKeyIntroView: View {
    @State private var anthropicAPIKey = ""
    @State private var openAIAPIKey = ""
    @State private var geminiAPIKey = ""
+   @State private var ollamaLocalHostURL = ""
    @State private var anthropicConfigAdded: Bool = false
    @State private var openAIConfigAdded: Bool = false
+   @State private var ollamaConfigAdded: Bool = false
    @State private var geminiConfigAdded: Bool = false
 
    @State private var configurations: [LLMConfiguration] = []
@@ -46,6 +48,12 @@ struct ApiKeyIntroView: View {
                   apiKey: $geminiAPIKey) {
                      configurations.append(.gemini(apiKey: geminiAPIKey))
                   }
+               LLMConfigurationView(
+                  provider: "Ollama",
+                  configurationAdded: $ollamaConfigAdded,
+                  apiKey: $ollamaLocalHostURL) {
+                     configurations.append(.ollama(url: ollamaLocalHostURL))
+                  }
             }
             .buttonStyle(.bordered)
             .padding()
@@ -63,7 +71,7 @@ struct ApiKeyIntroView: View {
             Spacer()
          }
          .padding()
-         .navigationTitle("Enter API Keys")
+         .navigationTitle("Enter API Keys or URL's")
       }
    }
 }
@@ -75,11 +83,10 @@ struct LLMConfigurationView: View {
    @Binding var apiKey: String
    let addConfig: () -> Void
    
-   
    var body: some View {
       VStack(alignment: .leading) {
          HStack {
-            TextField("Enter \(provider) API Key", text: $apiKey)
+            TextField("Enter \(provider) API Key or URL", text: $apiKey)
             Button {
                addConfig()
                configurationAdded = true

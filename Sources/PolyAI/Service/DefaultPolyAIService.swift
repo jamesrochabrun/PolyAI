@@ -27,6 +27,7 @@ extension GenerativeModel {
 struct DefaultPolyAIService: PolyAIService {
    
    private var openAIService: OpenAIService?
+   private var ollamaOpenAIServiceCompatible: OpenAIService?
    private var anthropicService: AnthropicService?
    private var gemini: GenerativeModel.Configuration?
    
@@ -51,6 +52,9 @@ struct DefaultPolyAIService: PolyAIService {
             
          case .gemini(let apiKey):
             gemini = .init(apiKey: apiKey)
+            
+         case .ollama(let url):
+            ollamaOpenAIServiceCompatible = OpenAIServiceFactory.ollama(baseURL: url)
          }
       }
    }
@@ -76,13 +80,13 @@ struct DefaultPolyAIService: PolyAIService {
          }
          // Remove all system messages as Anthropic uses the system message as a parameter and not as part of the messages array.
          let messageParams: [SwiftAnthropic.MessageParameter.Message] = messages.compactMap { message in
-             guard message.role != "system" else {
-                 return nil  // Skip "system" roles
-             }
-             return MessageParameter.Message(
-                 role: SwiftAnthropic.MessageParameter.Message.Role(rawValue: message.role) ?? .user,
-                 content: .text(message.content)
-             )
+            guard message.role != "system" else {
+               return nil  // Skip "system" roles
+            }
+            return MessageParameter.Message(
+               role: SwiftAnthropic.MessageParameter.Message.Role(rawValue: message.role) ?? .user,
+               content: .text(message.content)
+            )
          }
          let systemMessage  = messages.first { $0.role == "system" }
          let messageParameter = MessageParameter(model: model, messages: messageParams, maxTokens: maxTokens, system: systemMessage?.content, stream: false)
@@ -105,6 +109,13 @@ struct DefaultPolyAIService: PolyAIService {
             message.role == "user"
          }?.content ?? ""
          return try await generativeModel.generateContent(userMessage)
+      case .ollama(let model, let messages, let maxTokens):
+         guard let ollamaOpenAIServiceCompatible else {
+            throw PolyAIError.missingLLMConfiguration("You Must provide a valid configuration for the \(parameter.llmService) API")
+         }
+         let messageParams: [SwiftOpenAI.ChatCompletionParameters.Message] = messages.map { .init(role: .init(rawValue: $0.role) ?? .user, content: .text($0.content)) }
+         let messageParameter = ChatCompletionParameters(messages: messageParams, model: .custom(model), maxTokens: maxTokens)
+         return try await ollamaOpenAIServiceCompatible.startChat(parameters: messageParameter)
       }
    }
    
@@ -160,6 +171,15 @@ struct DefaultPolyAIService: PolyAIService {
             message.role == "user"
          }?.content ?? ""
          let stream = generativeModel.generateContentStream(userMessage)
+         return try mapToLLMMessageStreamResponse(stream: stream)
+      case .ollama(let model, let messages, let maxTokens):
+         guard let ollamaOpenAIServiceCompatible else {
+            throw PolyAIError.missingLLMConfiguration("You Must provide a valid configuration for the \(parameter.llmService) API")
+         }
+         let messageParams: [SwiftOpenAI.ChatCompletionParameters.Message] = messages.map { .init(role: .init(rawValue: $0.role) ?? .user, content: .text($0.content)) }
+         let messageParameter = ChatCompletionParameters(messages: messageParams, model: .custom(model), maxTokens: maxTokens)
+         
+         let stream = try await ollamaOpenAIServiceCompatible.startStreamedChat(parameters: messageParameter)
          return try mapToLLMMessageStreamResponse(stream: stream)
       }
    }

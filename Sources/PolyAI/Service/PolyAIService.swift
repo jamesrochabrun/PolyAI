@@ -46,6 +46,11 @@ public enum LLMConfiguration {
    /// - Parameters:
    ///   - apiKey: The API key for authenticating requests to Gemini.
    case gemini(apiKey: String)
+   
+   /// Configuration for accessing Ollama models using OpenAI endpoints compatibility.
+   /// - Parameters:
+   ///   - url: The local host URL. e.g "http://localhost:11434"
+   case ollama(url: String)
 }
 
 /// Defines the interface for a service that interacts with Large Language Models (LLMs).
