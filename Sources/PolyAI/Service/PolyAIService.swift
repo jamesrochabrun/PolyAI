@@ -30,10 +30,11 @@ public enum LLMConfiguration {
       /// Configuration for accessing OpenAI's API.
       /// - Parameters:
       ///   - aiproxyPartialKey: The partial key provided in the 'API Keys' section of the AIProxy dashboard.
-      ///   - aiproxyDeviceCheckBypass: The bypass token that is provided in the 'API Keys' section of the AIProxy dashboard.
-      ///   - configuration: The URLSession configuration to use for network requests. Defaults to `.default`.
-      ///   - decoder: The JSON decoder used for decoding responses. Defaults to a new instance of `JSONDecoder`.
-      case aiProxy(aiproxyPartialKey: String, aiproxyDeviceCheckBypass: String? = nil, configuration: URLSessionConfiguration = .default, decoder: JSONDecoder = .init())
+      ///                        Please see the integration guide for acquiring your key, at https://www.aiproxy.pro/docs
+      ///   - aiproxyClientID: If your app already has client or user IDs that you want to annotate AIProxy requests
+      ///                      with, you can pass a clientID here. If you do not have existing client or user IDs, leave
+      ///                      the `clientID` argument out, and IDs will be generated automatically for you.
+      case aiProxy(aiproxyPartialKey: String, aiproxyClientID: String? = nil)
    }
    
    /// Configuration for accessing Anthropic's API.

@@ -43,8 +43,8 @@ struct DefaultPolyAIService: PolyAIService {
             case .azure(let azureConfiguration, let urlSessionConfiguration, let decoder):
                openAIService = OpenAIServiceFactory.service(azureConfiguration: azureConfiguration, urlSessionConfiguration: urlSessionConfiguration, decoder: decoder)
           
-            case .aiProxy(let aiproxyPartialKey, let aiproxyDeviceCheckBypass, let configuration, let decoder):
-               openAIService = OpenAIServiceFactory.service(aiproxyPartialKey: aiproxyPartialKey, aiproxyDeviceCheckBypass: aiproxyDeviceCheckBypass, configuration: configuration, decoder: decoder)
+            case .aiProxy(let aiproxyPartialKey, let aiproxyClientID):
+               openAIService = OpenAIServiceFactory.service(aiproxyPartialKey: aiproxyPartialKey, aiproxyClientID: aiproxyClientID)
             }
             
          case .anthropic(let apiKey, let configuration):
@@ -54,7 +54,7 @@ struct DefaultPolyAIService: PolyAIService {
             gemini = .init(apiKey: apiKey)
             
          case .ollama(let url):
-            ollamaOpenAIServiceCompatible = OpenAIServiceFactory.ollama(baseURL: url)
+            ollamaOpenAIServiceCompatible = OpenAIServiceFactory.service(baseURL: url)
          }
       }
    }
