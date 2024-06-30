@@ -6,7 +6,7 @@
       "location" : "https://github.com/google/generative-ai-swift",
       "state" : {
         "branch" : "main",
-        "revision" : "fcc1084ec87f66b8a12a4bc087e16f9ed5ae41c2"
+        "revision" : "54784005b57c2235a7669e0c12e8dafa68f0ca5f"
       }
     },
     {
@@ -24,7 +24,7 @@
       "location" : "https://github.com/jamesrochabrun/SwiftOpenAI",
       "state" : {
         "branch" : "main",
-        "revision" : "a5bc9d1679af57eedb79591e5a329dd0f608fd5d"
+        "revision" : "6bc5fe0f6f715f3eca4ea11b85e7f9bd5e5485ce"
       }
     }
   ],
