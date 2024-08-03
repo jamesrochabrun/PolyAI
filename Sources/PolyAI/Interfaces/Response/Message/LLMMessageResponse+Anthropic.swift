@@ -21,8 +21,8 @@ extension MessageResponse: LLMMessageResponse {
          switch contentItem {
          case .text(let text):
             return text
-         case .toolUse(_, let name, _):
-            return "Tool: \(name)"
+         case .toolUse(let toolUSe):
+            return "Tool: \(toolUSe.name)"
          }
       }.first ?? ""
    }
