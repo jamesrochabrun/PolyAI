@@ -45,6 +45,13 @@ Also call any local model using [Ollama OpenAI compatibility endopints](https://
 > routed through your backend server where your API keys can be securely
 > loaded from an environment variable or key management service.
 
+## Functionalities
+
+- [x] Chat completions
+- [x] Chat completions with stream
+- [ ] Tool use
+- [ ] Image as input
+
 ## Usage
 
 To interface with different LLMs, you need only to supply the corresponding LLM configuration and adjust the parameters accordingly.
