@@ -67,7 +67,7 @@ struct MessageDemoView: View {
                switch selectedSegment {
                case .openAI:
                   parameters = .openAI(
-                     model: .gpt35Turbo, 
+                     model: .o1Preview,
                      messages: [
                         .init(role: .user, content: prompt)
                      ])

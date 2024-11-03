@@ -1,4 +1,5 @@
 {
+  "originHash" : "c8eb6b2f915d3d6d156f171a65fbf05e9aa02f3d807715e75e83ab9646a62032",
   "pins" : [
     {
       "identity" : "generative-ai-swift",
@@ -6,7 +7,7 @@
       "location" : "https://github.com/google/generative-ai-swift",
       "state" : {
         "branch" : "main",
-        "revision" : "7d3e4883be6f431ad57a49ee2c0376f95a74b28c"
+        "revision" : "44b8ce120425f9cf53ca756f3434ca2c2696f8bd"
       }
     },
     {
@@ -15,7 +16,7 @@
       "location" : "https://github.com/jamesrochabrun/SwiftAnthropic",
       "state" : {
         "branch" : "main",
-        "revision" : "0f3e8f411df81168bdae7d2c424268f35de742cb"
+        "revision" : "f0c746648f0c393ebe7ae6349f35bf8dfde6a108"
       }
     },
     {
@@ -24,9 +25,9 @@
       "location" : "https://github.com/jamesrochabrun/SwiftOpenAI",
       "state" : {
         "branch" : "main",
-        "revision" : "392d01ea26be4f69fd2a5013df5a31f36fe80f13"
+        "revision" : "4895981777e8a53747fef85403e72bed1071c2d1"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

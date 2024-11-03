@@ -47,8 +47,8 @@ struct DefaultPolyAIService: PolyAIService {
                openAIService = OpenAIServiceFactory.service(aiproxyPartialKey: aiproxyPartialKey, aiproxyClientID: aiproxyClientID)
             }
             
-         case .anthropic(let apiKey, let configuration):
-            anthropicService = AnthropicServiceFactory.service(apiKey: apiKey, configuration: configuration)
+         case .anthropic(let apiKey, let configuration, let betaHeaders):
+            anthropicService = AnthropicServiceFactory.service(apiKey: apiKey, betaHeaders: betaHeaders, configuration: configuration)
             
          case .gemini(let apiKey):
             gemini = .init(apiKey: apiKey)
@@ -89,7 +89,7 @@ struct DefaultPolyAIService: PolyAIService {
             )
          }
          let systemMessage  = messages.first { $0.role == "system" }
-         let messageParameter = MessageParameter(model: model, messages: messageParams, maxTokens: maxTokens, system: systemMessage?.content, stream: false)
+         let messageParameter = MessageParameter(model: model, messages: messageParams, maxTokens: maxTokens, system: .text(systemMessage?.content ?? ""), stream: false)
          return try await anthropicService.createMessage(messageParameter)
          
       case .gemini(let model, let messages, let maxTokens):
@@ -150,7 +150,7 @@ struct DefaultPolyAIService: PolyAIService {
              )
          }
          let systemMessage  = messages.first { $0.role == "system" }
-         let messageParameter = MessageParameter(model: model, messages: messageParams, maxTokens: maxTokens, system: systemMessage?.content)
+         let messageParameter = MessageParameter(model: model, messages: messageParams, maxTokens: maxTokens, system: .text(systemMessage?.content ?? ""))
          let stream = try await anthropicService.streamMessage(messageParameter)
          return try mapToLLMMessageStreamResponse(stream: stream)
          

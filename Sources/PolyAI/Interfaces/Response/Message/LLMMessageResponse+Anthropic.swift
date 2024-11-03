@@ -28,7 +28,7 @@ extension MessageResponse: LLMMessageResponse {
    }
    
    public var usageMetrics: UsageMetrics {
-      ChatUsageMetrics(inputTokens: usage.inputTokens, outputTokens: usage.outputTokens, totalTokens: nil)
+      ChatUsageMetrics(inputTokens: usage.inputTokens ?? 0, outputTokens: usage.outputTokens, totalTokens: nil)
    }
    
    public var tools: [ToolUsage] {

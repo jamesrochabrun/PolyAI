@@ -41,7 +41,8 @@ public enum LLMConfiguration {
    /// - Parameters:
    ///   - apiKey: The API key for authenticating requests to Anthropic.
    ///   - configuration: The URLSession configuration to use for network requests. Defaults to `.default`.
-   case anthropic(apiKey: String, configuration: URLSessionConfiguration = .default)
+   ///   - betaHeaders: An array of headers for Anthropic's beta features.
+   case anthropic(apiKey: String, configuration: URLSessionConfiguration = .default, betaHeaders: [String]? = nil)
    
    /// Configuration for accessing Gemini's API.
    /// - Parameters:
