@@ -91,24 +91,39 @@ struct DefaultPolyAIService: PolyAIService {
          let systemMessage  = messages.first { $0.role == "system" }
          let messageParameter = MessageParameter(model: model, messages: messageParams, maxTokens: maxTokens, system: .text(systemMessage?.content ?? ""), stream: false)
          return try await anthropicService.createMessage(messageParameter)
-         
+      
       case .gemini(let model, let messages, let maxTokens):
-         guard let gemini else {
-            throw PolyAIError.missingLLMConfiguration("You Must provide a valid configuration for the \(parameter.llmService) API")
-         }
-         let systemInstruction: ModelContent?
-         if let systemMessage = messages.first(where: { message in
-            message.role == "system"
-         })?.content {
-            systemInstruction = ModelContent(parts: [.text(systemMessage)])
-         } else {
-            systemInstruction = nil
-         }
-         let generativeModel = GenerativeModel(name: model, apiKey: gemini.apiKey, generationConfig: .init(GenerationConfig(maxOutputTokens: maxTokens)), systemInstruction: systemInstruction)
-         let userMessage = messages.first { message in
-            message.role == "user"
-         }?.content ?? ""
-         return try await generativeModel.generateContent(userMessage)
+          guard let gemini else {
+              throw PolyAIError.missingLLMConfiguration("You Must provide a valid configuration for the \(parameter.llmService) API")
+          }
+          
+          // Extract system message if present
+          let systemInstruction: ModelContent?
+          if let systemMessage = messages.first(where: { $0.role == "system" })?.content {
+              systemInstruction = ModelContent(parts: [.text(systemMessage)])
+          } else {
+              systemInstruction = nil
+          }
+          
+          // Create the model with system instruction
+          let generativeModel = GenerativeModel(
+              name: model,
+              apiKey: gemini.apiKey,
+              generationConfig: .init(GenerationConfig(maxOutputTokens: maxTokens)),
+              systemInstruction: systemInstruction
+          )
+          
+          // Convert messages to ModelContent array for chat history
+          let chatHistory = messages.filter { $0.role != "system" }.map { message in
+              ModelContent(
+                  role: message.role,
+                  parts: [.text(message.content)]
+              )
+          }
+          
+          // Create chat with history and send the last message
+          let chat = generativeModel.startChat(history: chatHistory)
+          return try await chat.sendMessage("")  // Empty message since history contains everything
       case .ollama(let model, let messages, let maxTokens):
          guard let ollamaOpenAIServiceCompatible else {
             throw PolyAIError.missingLLMConfiguration("You Must provide a valid configuration for the \(parameter.llmService) API")

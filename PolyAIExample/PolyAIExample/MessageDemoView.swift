@@ -80,7 +80,7 @@ struct MessageDemoView: View {
                      maxTokens: 1024)
                case .gemini:
                   parameters = .gemini(
-                     model: "gemini-1.5-pro-latest", messages: [
+                     model: "gemini-1.0-pro", messages: [
                         .init(role: .user, content: prompt)
                   ], maxTokens: 2000)
                case .llama3:

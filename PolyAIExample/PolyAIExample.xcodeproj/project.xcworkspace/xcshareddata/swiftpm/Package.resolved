@@ -7,7 +7,7 @@
       "location" : "https://github.com/google/generative-ai-swift",
       "state" : {
         "branch" : "main",
-        "revision" : "44b8ce120425f9cf53ca756f3434ca2c2696f8bd"
+        "revision" : "31d3eb8b399deb288373b99953a8dec5c11bcb57"
       }
     },
     {
@@ -16,7 +16,7 @@
       "location" : "https://github.com/jamesrochabrun/SwiftAnthropic",
       "state" : {
         "branch" : "main",
-        "revision" : "f0c746648f0c393ebe7ae6349f35bf8dfde6a108"
+        "revision" : "7262ced65e890ea5311193b849786344432d8fa7"
       }
     },
     {
@@ -25,7 +25,7 @@
       "location" : "https://github.com/jamesrochabrun/SwiftOpenAI",
       "state" : {
         "branch" : "main",
-        "revision" : "4895981777e8a53747fef85403e72bed1071c2d1"
+        "revision" : "25c73a4ce4bf05e1d75a3b405e677f8c022488cf"
       }
     }
   ],
