@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import GoogleGenerativeAI
 import SwiftAnthropic
 import SwiftOpenAI
 
@@ -16,20 +15,12 @@ enum PolyAIError: Error {
    case missingLLMConfiguration(String)
 }
 
-// MARK: Gemini specific
-
-extension GenerativeModel {
-   public struct Configuration {
-      let apiKey: String
-   }
-}
-
 struct DefaultPolyAIService: PolyAIService {
    
    private var openAIService: OpenAIService?
    private var ollamaOpenAIServiceCompatible: OpenAIService?
    private var anthropicService: AnthropicService?
-   private var gemini: GenerativeModel.Configuration?
+   private var gemini: OpenAIService?
    
    init(configurations: [LLMConfiguration])
    {
@@ -51,7 +42,14 @@ struct DefaultPolyAIService: PolyAIService {
             anthropicService = AnthropicServiceFactory.service(apiKey: apiKey, betaHeaders: betaHeaders, configuration: configuration)
             
          case .gemini(let apiKey):
-            gemini = .init(apiKey: apiKey)
+            let baseURL = "https://generativelanguage.googleapis.com"
+            let version = "v1beta"
+
+            let service = OpenAIServiceFactory.service(
+               apiKey: apiKey,
+               overrideBaseURL: baseURL,
+               overrideVersion: version)
+            gemini = service
             
          case .ollama(let url):
             ollamaOpenAIServiceCompatible = OpenAIServiceFactory.service(baseURL: url)
@@ -93,37 +91,13 @@ struct DefaultPolyAIService: PolyAIService {
          return try await anthropicService.createMessage(messageParameter)
       
       case .gemini(let model, let messages, let maxTokens):
-          guard let gemini else {
-              throw PolyAIError.missingLLMConfiguration("You Must provide a valid configuration for the \(parameter.llmService) API")
-          }
-          
-          // Extract system message if present
-          let systemInstruction: ModelContent?
-          if let systemMessage = messages.first(where: { $0.role == "system" })?.content {
-              systemInstruction = ModelContent(parts: [.text(systemMessage)])
-          } else {
-              systemInstruction = nil
-          }
-          
-          // Create the model with system instruction
-          let generativeModel = GenerativeModel(
-              name: model,
-              apiKey: gemini.apiKey,
-              generationConfig: .init(GenerationConfig(maxOutputTokens: maxTokens)),
-              systemInstruction: systemInstruction
-          )
-          
-          // Convert messages to ModelContent array for chat history
-          let chatHistory = messages.filter { $0.role != "system" }.map { message in
-              ModelContent(
-                  role: message.role,
-                  parts: [.text(message.content)]
-              )
-          }
-          
-          // Create chat with history and send the last message
-          let chat = generativeModel.startChat(history: chatHistory)
-          return try await chat.sendMessage("")  // Empty message since history contains everything
+         guard let gemini else {
+            throw PolyAIError.missingLLMConfiguration("You Must provide a valid configuration for the \(parameter.llmService) API")
+         }
+         let messageParams: [SwiftOpenAI.ChatCompletionParameters.Message] = messages.map { .init(role: .init(rawValue: $0.role) ?? .user, content: .text($0.content)) }
+         let messageParameter = ChatCompletionParameters(messages: messageParams, model: .custom(model), maxTokens: maxTokens)
+         return try await gemini.startChat(parameters: messageParameter)
+         
       case .ollama(let model, let messages, let maxTokens):
          guard let ollamaOpenAIServiceCompatible else {
             throw PolyAIError.missingLLMConfiguration("You Must provide a valid configuration for the \(parameter.llmService) API")
@@ -145,7 +119,6 @@ struct DefaultPolyAIService: PolyAIService {
          }
          let messageParams: [SwiftOpenAI.ChatCompletionParameters.Message] = messages.map { .init(role: .init(rawValue: $0.role) ?? .user, content: .text($0.content)) }
          let messageParameter = ChatCompletionParameters(messages: messageParams, model: model, maxTokens: maxTokens)
-         
          
          let stream = try await openAIService.startStreamedChat(parameters: messageParameter)
          return try mapToLLMMessageStreamResponse(stream: stream)
@@ -173,20 +146,12 @@ struct DefaultPolyAIService: PolyAIService {
          guard let gemini else {
             throw PolyAIError.missingLLMConfiguration("You Must provide a valid configuration for the \(parameter.llmService) API")
          }
-         let systemInstruction: ModelContent?
-         if let systemMessage = messages.first(where: { message in
-            message.role == "system"
-         })?.content {
-            systemInstruction = ModelContent(parts: [.text(systemMessage)])
-         } else {
-            systemInstruction = nil
-         }
-         let generativeModel = GenerativeModel(name: model, apiKey: gemini.apiKey, generationConfig: .init(GenerationConfig(maxOutputTokens: maxTokens)), systemInstruction: systemInstruction)
-         let userMessage = messages.first { message in
-            message.role == "user"
-         }?.content ?? ""
-         let stream = generativeModel.generateContentStream(userMessage)
+         let messageParams: [SwiftOpenAI.ChatCompletionParameters.Message] = messages.map { .init(role: .init(rawValue: $0.role) ?? .user, content: .text($0.content)) }
+         let messageParameter = ChatCompletionParameters(messages: messageParams, model: .custom(model), maxTokens: maxTokens)
+         
+         let stream = try await gemini.startStreamedChat(parameters: messageParameter)
          return try mapToLLMMessageStreamResponse(stream: stream)
+         
       case .ollama(let model, let messages, let maxTokens):
          guard let ollamaOpenAIServiceCompatible else {
             throw PolyAIError.missingLLMConfiguration("You Must provide a valid configuration for the \(parameter.llmService) API")

@@ -31,7 +31,7 @@ public enum LLMParameter {
    ///   - model: The specific model of Gemini to use.
    ///   - messages: An array of messages to send to the model.
    ///   - maxTokens: The maximum number of tokens to generate.
-   case gemini(model: String, messages: [LLMMessage], maxTokens: Int)
+   case gemini(model: String, messages: [LLMMessage], maxTokens: Int? = nil)
    
    /// Represents a configuration for interacting with Gemini's models.
    /// - Parameters:

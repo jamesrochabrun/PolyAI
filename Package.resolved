@@ -1,21 +1,12 @@
 {
   "pins" : [
     {
-      "identity" : "generative-ai-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/google/generative-ai-swift",
-      "state" : {
-        "branch" : "main",
-        "revision" : "fcc1084ec87f66b8a12a4bc087e16f9ed5ae41c2"
-      }
-    },
-    {
       "identity" : "swiftanthropic",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/jamesrochabrun/SwiftAnthropic",
       "state" : {
         "branch" : "main",
-        "revision" : "03b6e061b920fc0cc3ca21f62855a5a677882a0c"
+        "revision" : "7262ced65e890ea5311193b849786344432d8fa7"
       }
     },
     {
@@ -24,7 +15,7 @@
       "location" : "https://github.com/jamesrochabrun/SwiftOpenAI",
       "state" : {
         "branch" : "main",
-        "revision" : "c3ad62e1ed60b8e90ff47485ddab72495df342c3"
+        "revision" : "25c73a4ce4bf05e1d75a3b405e677f8c022488cf"
       }
     }
   ],
