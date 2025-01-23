@@ -85,7 +85,7 @@ struct MessageDemoView: View {
                   ], maxTokens: 2000)
                case .llama3:
                   parameters = .ollama(
-                     model: "llama3",
+                     model: "llama3.1",
                      messages: [
                         .init(role: .user, content: prompt)
                      ],

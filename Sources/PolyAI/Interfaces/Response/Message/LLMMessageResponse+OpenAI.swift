@@ -21,7 +21,7 @@ extension ChatCompletionObject: LLMMessageResponse {
    }
    
    public var usageMetrics: UsageMetrics {
-      ChatUsageMetrics(inputTokens: usage.promptTokens, outputTokens: usage.completionTokens, totalTokens: usage.totalTokens)
+      ChatUsageMetrics(inputTokens: usage?.promptTokens ?? 0, outputTokens: usage?.completionTokens ?? 0, totalTokens: usage?.totalTokens)
    }
    
    public var tools: [ToolUsage] {
