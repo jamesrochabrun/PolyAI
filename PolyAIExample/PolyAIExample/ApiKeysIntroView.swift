@@ -13,10 +13,15 @@ struct ApiKeyIntroView: View {
    @State private var anthropicAPIKey = ""
    @State private var openAIAPIKey = ""
    @State private var geminiAPIKey = ""
+   @State private var groqAPIKey = ""
+   @State private var openRouterAPIKey = ""
    @State private var ollamaLocalHostURL = ""
+   
    @State private var anthropicConfigAdded: Bool = false
    @State private var openAIConfigAdded: Bool = false
    @State private var ollamaConfigAdded: Bool = false
+   @State private var groqConfigAdded: Bool = false
+   @State private var openRouterConfigAdded: Bool = false
    @State private var geminiConfigAdded: Bool = false
 
    @State private var configurations: [LLMConfiguration] = []
@@ -46,19 +51,31 @@ struct ApiKeyIntroView: View {
                   provider: "Gemini",
                   configurationAdded: $geminiConfigAdded,
                   apiKey: $geminiAPIKey) {
-                     configurations.append(.gemini(apiKey: geminiAPIKey))
+                     configurations.append(.openAI(.gemini(apiKey: geminiAPIKey)))
+                  }
+               LLMConfigurationView(
+                  provider: "Groq",
+                  configurationAdded: $groqConfigAdded,
+                  apiKey: $groqAPIKey) {
+                     configurations.append(.openAI(.groq(apiKey: groqAPIKey)))
+                  }
+               LLMConfigurationView(
+                  provider: "OpenRouter",
+                  configurationAdded: $openRouterConfigAdded,
+                  apiKey: $openRouterAPIKey) {
+                     configurations.append(.openAI(.openRouter(apiKey: openRouterAPIKey)))
                   }
                LLMConfigurationView(
                   provider: "Ollama",
                   configurationAdded: $ollamaConfigAdded,
                   apiKey: $ollamaLocalHostURL) {
-                     configurations.append(.ollama(url: ollamaLocalHostURL))
+                     configurations.append(.openAI(.ollama(url: ollamaLocalHostURL)))
                   }
             }
             .buttonStyle(.bordered)
             .padding()
             .textFieldStyle(.roundedBorder)
-            NavigationLink(destination: OptionsListView(service: PolyAIServiceFactory.serviceWith(configurations))) {
+            NavigationLink(destination: OptionsListView(service: PolyAIServiceFactory.serviceWith(configurations, debugEnabled: true))) {
                Text("Continue")
                   .padding()
                   .padding(.horizontal, 48)
