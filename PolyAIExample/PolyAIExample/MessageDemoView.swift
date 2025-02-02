@@ -25,6 +25,9 @@ struct MessageDemoView: View {
       case anthropic
       case gemini
       case llama3
+      case groq
+      case openRouter
+      case deepSeek
       
       var id: String { rawValue }
    }
@@ -71,6 +74,24 @@ struct MessageDemoView: View {
                      messages: [
                         .init(role: .user, content: prompt)
                      ])
+               case .groq:
+                  parameters = .groq(
+                     model: "deepseek-r1-distill-llama-70b",
+                     messages: [
+                        .init(role: .user, content: prompt)
+                     ])
+               case .deepSeek:
+                  parameters = .deepSeek(
+                     model: "deepseek-reasoner",
+                     messages: [
+                        .init(role: .user, content: prompt)
+                     ])
+               case .openRouter:
+                  parameters = .openRouter(
+                     model: "deepseek/deepseek-r1:free",
+                     messages: [
+                        .init(role: .user, content: prompt)
+                     ])
                case .anthropic:
                   parameters = .anthropic(
                      model: .claude3Sonnet,
@@ -96,6 +117,7 @@ struct MessageDemoView: View {
          } label: {
             Image(systemName: "paperplane")
          }
+         .keyboardShortcut(.return)
          .buttonStyle(.bordered)
       }
       .padding()

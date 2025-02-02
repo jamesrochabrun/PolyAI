@@ -7,7 +7,7 @@
       "location" : "https://github.com/jamesrochabrun/SwiftAnthropic",
       "state" : {
         "branch" : "main",
-        "revision" : "bdf0a66e569fc2455b034ca091b9670a79a33b1f"
+        "revision" : "2bfd7ca13fabc4fbb47c7a97d7a0c1b4831bffd2"
       }
     },
     {
@@ -16,7 +16,7 @@
       "location" : "https://github.com/jamesrochabrun/SwiftOpenAI",
       "state" : {
         "branch" : "main",
-        "revision" : "6f1a8dd2e3de348291c8565e04ef2bb59c4a8a0e"
+        "revision" : "e589864f644f10e5a7868174208d414f06a0d27c"
       }
     }
   ],
