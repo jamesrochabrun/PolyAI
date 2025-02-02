@@ -11,9 +11,9 @@ import SwiftOpenAI
 /// Represents configurations for different LLM providers.
 public enum LLMConfiguration {
 
-   case openAI(OpenAI)
+   case openAI(OpenAICompatible)
    
-   public enum OpenAI {
+   public enum OpenAICompatible {
       /// Configuration for accessing OpenAI's API.
       /// - Parameters:
       ///   - apiKey: The API key for authenticating requests to OpenAI.
@@ -35,6 +35,35 @@ public enum LLMConfiguration {
       ///                      with, you can pass a clientID here. If you do not have existing client or user IDs, leave
       ///                      the `clientID` argument out, and IDs will be generated automatically for you.
       case aiProxy(aiproxyPartialKey: String, aiproxyClientID: String? = nil)
+      /// Configuration for accessing Gemini's API.
+      /// - Parameters:
+      ///   - apiKey: The API key for authenticating requests to Gemini.
+      ///   - urlSessionConfiguration: The URLSession configuration to use for network requests. Defaults to `.default`.
+      ///   - decoder: The JSON decoder used for decoding responses. Defaults to a new instance of `JSONDecoder`.
+      case gemini(apiKey: String, configuration: URLSessionConfiguration = .default, decoder: JSONDecoder = .init())
+      /// Configuration for accessing Groq's API.
+      /// - Parameters:
+      ///   - apiKey: The API key for authenticating requests to Gemini.
+      ///   - urlSessionConfiguration: The URLSession configuration to use for network requests. Defaults to `.default`.
+      ///   - decoder: The JSON decoder used for decoding responses. Defaults to a new instance of `JSONDecoder`.
+      case groq(apiKey: String, configuration: URLSessionConfiguration = .default, decoder: JSONDecoder = .init())
+      /// Configuration for accessing DeepSeek''s API.
+      /// - Parameters:
+      ///   - apiKey: The API key for authenticating requests to Gemini.
+      ///   - urlSessionConfiguration: The URLSession configuration to use for network requests. Defaults to `.default`.
+      ///   - decoder: The JSON decoder used for decoding responses. Defaults to a new instance of `JSONDecoder`.
+      case deepSeek(apiKey: String, configuration: URLSessionConfiguration = .default, decoder: JSONDecoder = .init())
+      /// Configuration for accessing Groq's API.
+      /// - Parameters:
+      ///   - apiKey: The API key for authenticating requests to OpenRouter.
+      ///   - urlSessionConfiguration: The URLSession configuration to use for network requests. Defaults to `.default`.
+      ///   - decoder: The JSON decoder used for decoding responses. Defaults to a new instance of `JSONDecoder`.
+      ///   - extraHeaders: Optional. Site URL  and title for rankings on openrouter.ai
+      case openRouter(apiKey: String, configuration: URLSessionConfiguration = .default, decoder: JSONDecoder = .init(), extraHeaders: [String: String]? = nil)
+      /// Configuration for accessing Ollama models using OpenAI endpoints compatibility.
+      /// - Parameters:
+      ///   - url: The local host URL. e.g "http://localhost:11434"
+      case ollama(url: String)
    }
    
    /// Configuration for accessing Anthropic's API.
@@ -43,24 +72,16 @@ public enum LLMConfiguration {
    ///   - configuration: The URLSession configuration to use for network requests. Defaults to `.default`.
    ///   - betaHeaders: An array of headers for Anthropic's beta features.
    case anthropic(apiKey: String, configuration: URLSessionConfiguration = .default, betaHeaders: [String]? = nil)
-   
-   /// Configuration for accessing Gemini's API.
-   /// - Parameters:
-   ///   - apiKey: The API key for authenticating requests to Gemini.
-   case gemini(apiKey: String)
-   
-   /// Configuration for accessing Ollama models using OpenAI endpoints compatibility.
-   /// - Parameters:
-   ///   - url: The local host URL. e.g "http://localhost:11434"
-   case ollama(url: String)
 }
 
 /// Defines the interface for a service that interacts with Large Language Models (LLMs).
 public protocol PolyAIService {
 
    /// Initializes a new instance with the specified configurations for LLM providers.
-   /// - Parameter configurations: An array of `LLMConfiguration` items, each specifying settings for a different LLM provider.
-   init(configurations: [LLMConfiguration])
+   /// - Parameters:
+   ///  - configurations: An array of `LLMConfiguration` items, each specifying settings for a different LLM provider.
+   ///  - debugEnabled: Logs requests if `true`
+   init(configurations: [LLMConfiguration], debugEnabled: Bool)
    
    // MARK: Message
 
@@ -81,4 +102,24 @@ public protocol PolyAIService {
    func streamMessage(
       _ parameter: LLMParameter)
    async throws -> AsyncThrowingStream<LLMMessageStreamResponse, Error>
+}
+
+extension LLMConfiguration {
+   
+   public var rawValue: String {
+      switch self {
+      case .openAI(let openAICompatible):
+         switch openAICompatible {
+         case .api: "OpenAI"
+         case .azure: "Azure"
+         case .aiProxy: "AiProxy"
+         case .gemini: "Gemini"
+         case .groq: "Groq"
+         case .ollama: "Ollama"
+         case .openRouter: "OpenRouter"
+         case .deepSeek: "DeepSeek"
+         }
+      case .anthropic: "Anthropic"
+      }
+   }
 }

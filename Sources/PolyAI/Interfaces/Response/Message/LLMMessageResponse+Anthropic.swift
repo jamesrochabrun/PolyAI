@@ -19,7 +19,7 @@ extension MessageResponse: LLMMessageResponse {
    public var contentDescription: String {
       content.map { contentItem in
          switch contentItem {
-         case .text(let text):
+         case .text(let text, _):
             return text
          case .toolUse(let toolUSe):
             return "Tool: \(toolUSe.name)"
